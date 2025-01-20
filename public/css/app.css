@@ -1,0 +1,32 @@
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+th, td {
+    padding: 10px;
+    text-align: left;
+    border: 1px solid #ddd;
+}
+
+tbody tr:nth-child(odd) {
+    background-color: #d3d3d3; /* 奇数行の色 */
+}
+
+tbody tr:nth-child(even) {
+    background-color: #fff; /* 偶数行の色 */
+}
+
+
+
+.item {
+    float: left;
+}
+
+.content {
+    float: left;
+}
+
+.bottom {
+    float: bottom;
+}
