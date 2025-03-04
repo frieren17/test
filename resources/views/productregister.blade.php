@@ -50,7 +50,8 @@
                     <div class="row mb-3">
                         <label class="col-form-label col-sm-2" for="comment">商品画像</label>
                         <div class="col-sm-10">
-                            <form action="route('regist')" method="POST" enctype='multipart/form-data'>
+                            <form action="{{ route('regist') }}" method="POST" enctype='multipart/form-data'>
+                                @csrf
                                 <input type="file" name="image">
                             </form>
                         </div>

@@ -7,9 +7,13 @@ use Illuminate\Support\Facades\DB;
 
 class Company extends Model
 {
-    public function getList() {
-        $model_companies = DB::table('companies')->get();
+    // 11～15行目は無視↓
+    // public function getList() {
+    //     $model_companies = DB::table('companies')->get();
 
-        return $model_companies;
-    }
+    //     return $model_companies;
+    // }
+
+    protected $table = 'companies';
+
 }

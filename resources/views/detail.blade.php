@@ -33,14 +33,14 @@
                 <div class="row mb-3">
                     <label class="col-form-label col-sm-2">ID</label>
                     <div class="col-sm-10">
-                        {!! nl2br(htmlspecialchars($product->company_id)) !!}
+                        {!! nl2br(htmlspecialchars($product->id)) !!}
                     </div>
                 </div>
 
                 <div class="row mb-3">
                     <label class="col-form-label col-sm-2">商品画像</label>
                     <div class="col-sm-10">
-                        {!! nl2br(htmlspecialchars($product->img_path)) !!}
+                        <img src="{{ asset($product->img_path) }}">
                     </div>
                 </div>
 

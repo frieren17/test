@@ -43,7 +43,14 @@
                 @foreach ($products as $product)
                     <tr>
                         <td>{{ $product->id }}</td>
-                        <td>{{ $product->img_path }}</td>
+                        <!--<td>{{ $product->img_path }}</td>-->
+                        <td>
+                            @if ($product->img_path)
+                                <img src="{{ asset($product->img_path) }}" alt="Product Image">
+                            @else
+                                <span>商品画像</span>
+                            @endif
+                        </td>
                         <td>{{ $product->product_name }}</td>
                         <td>￥{{ $product->price }}</td>
                         <td>{{ $product->stock }}</td>
@@ -65,7 +72,11 @@
                 @endforeach
                 </tbody>
             </table>
+
+            
+
         </div>
     </div>
 </div>
+
 @endsection
