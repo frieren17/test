@@ -71,15 +71,14 @@ class TestController extends Controller
         DB::beginTransaction();
     
         try {
-           
              // 登録処理
-             $productModel->deleteProduct($id);
-             DB::commit();
+            $productModel->deleteProduct($id);
+            DB::commit();
         } catch (\Exception $e) {
             DB::rollback();
             return back();
         }
-       return redirect()->route('show.test');
+        return redirect()->route('show.test');
     }
 
     public function showListDetail($id) {
@@ -110,10 +109,9 @@ class TestController extends Controller
         DB::beginTransaction();
     
         try {
-           
              // 登録処理2we3
-             $model->storeProduct($request);
-             DB::commit();
+            $model->storeProduct($request);
+            DB::commit();
             
         } catch (\Exception $e) {
             DB::rollback();
@@ -139,10 +137,9 @@ class TestController extends Controller
         DB::beginTransaction();
     
         try {
-           
              // 登録処理
-             $product = $productModel->getEdit($id);
-             DB::commit();
+            $product = $productModel->getEdit($id);
+            DB::commit();
         } catch (\Exception $e) {
             DB::rollback();
             return back();
