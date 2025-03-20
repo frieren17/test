@@ -38,13 +38,14 @@ class Product extends Model
         return $query->get();
     }
 
-    public function storeProduct($request) {
+    public function storeProduct($request, $image_path) {
         DB::table('products')->insert([
             'product_name' => $request->input('product_name'),
             'company_id' => $request->input('company_name'),
             'price' => $request->input('price'),
             'stock' => $request->input('stock'),
             'comment' => $request->input('comment'),
+            'img_path' => $image_path,
             'created_at' => now(),
             'updated_at' => now(),
         ]);
@@ -72,7 +73,7 @@ class Product extends Model
         ->first();
     }
 
-    public function updateProduct($request, $id) {
+    public function updateProduct($request, $id, $image_path) {
         return DB::table('products')
         ->where('id', $id)
         ->update([
@@ -81,15 +82,11 @@ class Product extends Model
         'price' => $request->input('price'),
         'stock' => $request->input('stock'),
         'comment' => $request->input('comment'),
+        'img_path' => $image_path,
+        'created_at' => now(),
         'updated_at' => now(),
         ]);
     }
 
-    public function registImage($request) {
-        DB::table('products')->insert([
-            'img_path' => $image_path,
-            'created_at' => now(),
-            'updated_at' => now()
-        ]);
-    }
+
 }

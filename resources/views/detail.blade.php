@@ -40,7 +40,7 @@
                 <div class="row mb-3">
                     <label class="col-form-label col-sm-2">商品画像</label>
                     <div class="col-sm-10">
-                        <img src="{{ asset($product->img_path) }}">
+                        <img src="{{ asset($product->img_path) }}" style="max-width: 200px; max-height: 200px;">
                     </div>
                 </div>
 

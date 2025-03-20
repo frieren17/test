@@ -46,7 +46,7 @@
                         <!--<td>{{ $product->img_path }}</td>-->
                         <td>
                             @if ($product->img_path)
-                                <img src="{{ asset($product->img_path) }}" alt="Product Image">
+                                <img src="{{ asset($product->img_path) }}" alt="Product Image" style="max-width: 200px; max-height: 200px;">
                             @else
                                 <span>商品画像</span>
                             @endif

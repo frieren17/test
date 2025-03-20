@@ -4,7 +4,7 @@
 <div class="container">
         <h2>商品情報編集画面</h2>
 
-        <form action="{{ route('show.update', ['id' => $product->id]) }}" method="POST">
+        <form action="{{ route('show.update', ['id' => $product->id]) }}" method="POST" enctype="multipart/form-data">
             @csrf
             @method('PUT')
             <div class="row">
@@ -60,7 +60,7 @@
                     <div class="row mb-3">
                         <label class="col-form-label col-sm-2" for="comment">商品画像</label>
                         <div class="col-sm-10">
-                            <form action="route('regist')" method="POST" enctype='multipart/form-data'>
+                            <form action="{{ route('regist', ['id' => $product->id]) }}" method="POST" enctype='multipart/form-data'>
                                 <input type="file" name="image">
                             </form>
                         </div>

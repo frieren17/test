@@ -105,12 +105,21 @@ class TestController extends Controller
             ],
         ]);
 
+        $image = $request->file('image');
+
+        $image_path = null;
+        if($image) {
+            $file_name = $image->getClientOriginalName();
+            $image->storeAs('public/images', $file_name);
+            $image_path = 'storage/images/' . $file_name;
+        }
+
         $model = new Product();
         DB::beginTransaction();
     
         try {
              // 登録処理2we3
-            $model->storeProduct($request);
+            $model->storeProduct($request, $image_path);
             DB::commit();
             
         } catch (\Exception $e) {
@@ -165,7 +174,17 @@ class TestController extends Controller
         ]);
 
         $updateModel = new Product();
-        $updated = $updateModel->updateProduct($request, $id);
+
+        $image = $request->file('image');
+        $image_path = null;
+
+        if ($image) {
+            $file_name = $image->getClientOriginalName();
+            $image->storeAs('public/images', $file_name);
+            $image_path = 'storage/images/' . $file_name;  // 画像パス
+        }
+
+        $updated = $updateModel->updateProduct($request, $id, $image_path);
 
         // $updated = DB::table('products')
         //     ->where('id', $id)
@@ -184,27 +203,17 @@ class TestController extends Controller
     }
 
 
-    public function imageRegist(Request $request) {
-        $image = $request->file('image');
-        if (!$image) {
-            return back()->with('error', '画像が選択されていません');
-        }
-        $file_name = $image->getClientOriginalName();
-        $image->storeAs('public/images', $file_name);
-        $image_path = 'storage/images/' . $file_name;
-        $image_path->save();
-
-        \Log::info("画像パス: " . $image_path);
-
+    public function imageRegist(Request $request, $id, $image_path) {
         $productModel = new Product();
         DB::beginTransaction();
         try {
             $productModel->registImage($image_path);
             DB::commit();
             return back()->with('success', '画像が登録されました');
-        }catch(Exception $e){
+        } catch (Exception $e) {
             DB::rollBack();
             return back()->with('error', '画像の登録に失敗しました');
         }
     }
+    
 }
