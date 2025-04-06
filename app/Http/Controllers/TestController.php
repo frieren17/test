@@ -2,55 +2,18 @@
 
 namespace App\Http\Controllers;
 use Illuminate\Http\Request;
+use App\Http\Requests\TestRequest;
 use App\Models\Product;
 use App\Models\Company;
 use Illuminate\Support\Facades\DB;
 
 class TestController extends Controller
 {
-    // 12～24行目は無視↓
-    // public function showListProduct() {
-    //     $test_product = new Product();
-    //     $products = $test_product->getList();
-
-    //     return view('testview',['products' => $products]);
-    // }
-
-    // public function showListCompany() {
-    //     $test_company = new Company();
-    //     $companies = $test_company->getList();
-
-    //     return view('testview', ['companies' => $companies]);
-    // }
-
     public function showRegistForm() {
         return view('productregister');
     }
     
     public function testView(Request $request) {
-        // 32～35行目は無視↓
-        // $this->products = new Product();
-        // dd($this->products);
-        // $results = $this->products->getUserNameById();
-        // dd($results);
-
-        // $keyword = $request->input('keyword');
-        // $selectedCompanyId = $request->input('company_name');
-        
-
-        // $query = DB::table('products')
-        //     ->join('companies', 'products.company_id', '=', 'companies.id')
-        //     ->select('products.*', 'companies.company_name as company_name');
-        // if(!empty($keyword)) {
-        //     $query->where('products.product_name', 'LIKE', "%{$keyword}%");
-        // }
-        // if (!empty($selectedCompanyId)) {
-        //     $query->where('products.company_id', '=', $selectedCompanyId);
-        // }
-        // $products = $query->get();
-        // $companies = DB::table('companies')->get();
-        // return view('testView', compact('products', 'keyword', 'companies', 'selectedCompanyId'));
-        
         $keyword = $request->input('keyword');
         $selectedCompanyId = $request->input('company_name');
 
@@ -61,7 +24,8 @@ class TestController extends Controller
         $products = $productModel->searchProducts($keyword, $selectedCompanyId);
 
         // 会社のデータを取得
-        $companies = DB::table('companies')->get(); 
+        $companyModel = new Company(); 
+        $companies = $companyModel->viewTest($request);
 
         return view('testView', compact('products', 'keyword', 'companies', 'selectedCompanyId'));
     }
@@ -136,11 +100,6 @@ class TestController extends Controller
     }
 
     public function edit($id) {
-        // $product = DB::table('products')
-        // ->join('companies', 'products.company_id', '=', 'companies.id')
-        // ->select('products.*', 'companies.company_name as company_name')
-        // ->where('products.id', '=', $id)
-        // ->first();
         $productModel = new Product();
         $companies = DB::table('companies')->get();
         DB::beginTransaction();
@@ -156,8 +115,6 @@ class TestController extends Controller
         return view('edit',['product' => $product, 'companies' => $companies]);
     }
 
-
-    //↓未修正
     public function update(Request $request, $id) {
 
         $validated = $request->validate([
@@ -186,22 +143,10 @@ class TestController extends Controller
 
         $updated = $updateModel->updateProduct($request, $id, $image_path);
 
-        // $updated = DB::table('products')
-        //     ->where('id', $id)
-        //     ->update([
-        //     'product_name' => $request->input('product_name'),
-        //     'company_id' => $request->input('company_name'),
-        //     'price' => $request->input('price'),
-        //     'stock' => $request->input('stock'),
-        //     'comment' => $request->input('comment'),
-        //     'updated_at' => now(),
-        // ]);
-
         return redirect()->route('show.detail', ['id' => $id])->with('success', '商品が正常に登録されました');
         
         
     }
-
 
     public function imageRegist(Request $request, $id, $image_path) {
         $productModel = new Product();
@@ -214,6 +159,20 @@ class TestController extends Controller
             DB::rollBack();
             return back()->with('error', '画像の登録に失敗しました');
         }
+    }
+
+    public function registSubmit(TestRequest $request) {
+        $validatedData = $request->validated();
+        DB::beginTransaction();
+        try {
+            $modelRequest = new Product();
+            $modelRequest->submitRegist($request);
+            DB::commit();
+        } catch (Exception $e) {
+            DB::rollback();
+            return back();
+        }
+        return redirect()->route('show.register');
     }
     
 }

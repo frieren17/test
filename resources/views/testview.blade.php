@@ -43,7 +43,6 @@
                 @foreach ($products as $product)
                     <tr>
                         <td>{{ $product->id }}</td>
-                        <!--<td>{{ $product->img_path }}</td>-->
                         <td>
                             @if ($product->img_path)
                                 <img src="{{ asset($product->img_path) }}" alt="Product Image" style="max-width: 200px; max-height: 200px;">

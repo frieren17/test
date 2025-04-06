@@ -17,8 +17,6 @@ tbody tr:nth-child(even) {
     background-color: #fff; /* 偶数行の色 */
 }
 
-
-
 .item {
     float: left;
 }

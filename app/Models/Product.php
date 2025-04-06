@@ -7,19 +7,7 @@ use Illuminate\Support\Facades\DB;
 
 class Product extends Model
 {
-    // public function getList() {
-    //     $model_products = DB::table('products')->get();
-
-    //     return $model_products;
-    // }
-
-    // public function getUserNameById() {
-    //     return DB::table('products')
-    //         ->join('companies', 'products.company_id', '=', 'companies.id')
-    //         ->get();
-    // }
-
-    protected $table = 'products'; // テーブル名←エロクワント
+    protected $table = 'products'; 
 
     public function searchProducts($keyword, $selectedCompanyId)
     {
@@ -88,5 +76,16 @@ class Product extends Model
         ]);
     }
 
-
+    public function submitRegist($data) {
+        return DB::table('products')->insert([
+            'product_name' => $data->product_name,
+            'company_id' => $data->company_id,
+            'price' => $data->price,
+            'stock' => $data->stock,
+            'comment' => $data->comment,
+            'img_path' => $data->img_path,
+            'created_at' => now(),
+            'updated_at' => now(),
+        ]);
+    }
 }

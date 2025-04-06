@@ -10,7 +10,10 @@
                     <div class="row mb-3">
                         <label class="col-form-label col-sm-2" for="product_name">商品名<span class="text-danger">*</label>
                         <div class="col-sm-10">
-                            <input type="text" class="form-control" name="product_name" id="product_name">
+                            <input type="text" class="form-control" name="product_name" id="product_name" value="{{ old('product_name') }}">
+                            @if($errors->has('product_name'))
+                                <p>{{ $errors->first('product_name') }}</p>
+                            @endif
                         </div>
                     </div>
 
@@ -18,10 +21,11 @@
                         <label class="col-form-label col-sm-2" for="company_name">メーカー名<span class="text-danger">*</label>
                         <div class="col-sm-10">
                             <select class="form-control" id="id" name="company_name">
-                            @foreach ($companies as $company)
-                                <option value="{{ $company->id }}">{{ $company->company_name}}</option>
-                            @endforeach
-                            </select>
+                                <option value="" selected>選択してください</option>
+                                @foreach ($companies as $company)
+                                    <option value="{{ $company->id }}" {{ old('company_name') == $company->id ? 'selected' : '' }}>{{ $company->company_name}}</option>
+                                @endforeach
+                                </select>
                         </div>
 
                     </div>
@@ -29,21 +33,30 @@
                     <div class="row mb-3">
                         <label class="col-form-label col-sm-2" for="price">価格<span class="text-danger">*</label>
                         <div class="col-sm-10">
-                            <input type="text" class="form-control" name="price" id="price">
+                            <input type="text" class="form-control" name="price" id="price" value="{{ old('price') }}">
+                            @if($errors->has('price'))
+                                <p>{{ $errors->first('price') }}</p>
+                            @endif
                         </div>
                     </div>
 
                     <div class="row mb-3">
                         <label class="col-form-label col-sm-2" for="stock">在庫数<span class="text-danger">*</label>
                         <div class="col-sm-10">
-                            <input type="text" class="form-control" name="stock" id="stock">
+                            <input type="text" class="form-control" name="stock" id="stock" value="{{ old('stock') }}">
+                            @if($errors->has('stock'))
+                                <p>{{ $errors->first('stock') }}</p>
+                            @endif
                         </div>
                     </div>
 
                     <div class="row mb-3">
                         <label class="col-form-label col-sm-2" for="comment">コメント</label>
                         <div class="col-sm-10">
-                            <textarea class="form-control" style="height:100px" name="comment" id="comment"></textarea>
+                            <textarea class="form-control" style="height:100px" name="comment" id="comment">{{ old('comment') }}</textarea>
+                            @if($errors->has('comment'))
+                                <p>{{ $errors->first('comment') }}</p>
+                            @endif
                         </div>
                     </div>
 
