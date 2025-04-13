@@ -115,20 +115,20 @@ class TestController extends Controller
         return view('edit',['product' => $product, 'companies' => $companies]);
     }
 
-    public function update(Request $request, $id) {
+    public function update(TestRequest $request, $id) {
 
-        $validated = $request->validate([
-            'product_name' => 'required|string|max:255',
-            'company_name' => 'required',
-            'price' => 'required|numeric|min:0',
-            'stock' => 'required|integer|min:0',
-            'comment' => 'nullable|string',
-            'img_path' => [
-                'image',
-                'max:1024',
-                'mimes:jpg,png',
-            ],
-        ]);
+        // $validated = $request->validate([
+        //     'product_name' => 'required|string|max:255',
+        //     'company_name' => 'required',
+        //     'price' => 'required|numeric|min:0',
+        //     'stock' => 'required|integer|min:0',
+        //     'comment' => 'nullable|string',
+        //     'img_path' => [
+        //         'image',
+        //         'max:1024',
+        //         'mimes:jpg,png',
+        //     ],
+        // ]);
 
         $updateModel = new Product();
 

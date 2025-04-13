@@ -21,7 +21,7 @@
                 <div class="row mb-3">
                     <label class="col-form-label col-sm-2" for="product_name">商品名<span class="text-danger">*</label>
                     <div class="col-sm-10">
-                        <input type="text" class="form-control" name="product_name" id="product_name" value="{{ old('product_name') }}">
+                        <input type="text" class="form-control" name="product_name" id="product_name" value="{{ $product->product_name }}">
                         @if($errors->has('product_name'))
                             <p>{{ $errors->first('product_name') }}</p>
                         @endif
@@ -37,13 +37,16 @@
                             <option value="{{ $company->id }}">{{ $company->company_name}}</option>
                         @endforeach
                         </select>
+                        @if($errors->has('company_name'))
+                            <p>{{ $errors->first('company_name') }}</p>
+                        @endif
                     </div>
                 </div>
 
                 <div class="row mb-3">
                     <label class="col-form-label col-sm-2" for="price">価格<span class="text-danger">*</label>
                     <div class="col-sm-10">
-                        <input type="text" class="form-control" name="price" id="price" value="{{ old('price') }}">
+                        <input type="text" class="form-control" name="price" id="price" value="{{ $product->price }}">
                         @if($errors->has('price'))
                             <p>{{ $errors->first('price') }}</p>
                         @endif
@@ -53,7 +56,7 @@
                 <div class="row mb-3">
                     <label class="col-form-label col-sm-2" for="stock">在庫数<span class="text-danger">*</label>
                     <div class="col-sm-10">
-                        <input type="text" class="form-control" name="stock" id="stock" value="{{ old('stock') }}">
+                        <input type="text" class="form-control" name="stock" id="stock" value="{{ $product->stock }}">
                         @if($errors->has('stock'))
                             <p>{{ $errors->first('stock') }}</p>
                         @endif
