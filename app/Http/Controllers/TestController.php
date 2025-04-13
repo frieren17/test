@@ -55,19 +55,19 @@ class TestController extends Controller
         return view('productregister');
     }
 
-    public function addition(Request $request) {
-        $validated = $request->validate([
-            'product_name' => 'required|string|max:255',
-            'company_name' => 'required|string|max:255',
-            'price' => 'required|numeric|min:0',
-            'stock' => 'required|integer|min:0',
-            'comment' => 'nullable|string',
-            'img_path' => [
-                'image',
-                'max:1024',
-                'mimes:jpg,png',
-            ],
-        ]);
+    public function addition(TestRequest $request) {
+        // $validated = $request->validate([
+        //     'product_name' => 'required|string|max:255',
+        //     'company_name' => 'required|string|max:255',
+        //     'price' => 'required|numeric|min:0',
+        //     'stock' => 'required|integer|min:0',
+        //     'comment' => 'nullable|string',
+        //     'img_path' => [
+        //         'image',
+        //         'max:1024',
+        //         'mimes:jpg,png',
+        //     ],
+        // ]);
 
         $image = $request->file('image');
 

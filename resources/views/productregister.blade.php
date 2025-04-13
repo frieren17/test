@@ -23,9 +23,12 @@
                             <select class="form-control" id="id" name="company_name">
                                 <option value="" selected>選択してください</option>
                                 @foreach ($companies as $company)
-                                    <option value="{{ $company->id }}" {{ old('company_name') == $company->id ? 'selected' : '' }}>{{ $company->company_name}}</option>
+                                    <option value="{{ $company->id }}" @if(old('company_name') == $company->id) selected @endif>{{ $company->company_name}}</option>
                                 @endforeach
                                 </select>
+                                @if($errors->has('company_name'))
+                                    <p>{{ $errors->first('company_name') }}</p>
+                                @endif
                         </div>
 
                     </div>
