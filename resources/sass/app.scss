@@ -6,3 +6,28 @@
 
 // Bootstrap
 @import 'bootstrap/scss/bootstrap';
+
+/* tablesorter用の矢印スタイル */
+th.tablesorter-header {
+    position: relative;
+    padding-right: 20px;
+    cursor: pointer;
+}
+
+th.tablesorter-header::after {
+    content: '⇅'; /* 初期状態の矢印 */
+    position: absolute;
+    right: 8px;
+    color: #ccc;
+    font-size: 12px;
+}
+
+th.tablesorter-headerAsc::after {
+    content: '▲';
+    color: #000; /* 黒い矢印 */
+}
+
+th.tablesorter-headerDesc::after {
+    content: '▼';
+    color: #000; /* 黒い矢印 */
+}

@@ -6,7 +6,7 @@ use App\Http\Requests\TestRequest;
 use App\Models\Product;
 use App\Models\Company;
 use Illuminate\Support\Facades\DB;
-
+use Illuminate\Support\Facades\Log;
 class TestController extends Controller
 {
     public function showRegistForm() {
@@ -16,31 +16,51 @@ class TestController extends Controller
     public function testView(Request $request) {
         $keyword = $request->input('keyword');
         $selectedCompanyId = $request->input('company_name');
+        $minPrice = $request->input('min_price');
+        $maxPrice = $request->input('max_price');
+        $minStock = $request->input('min_stock');
+        $maxStock = $request->input('max_stock');
 
         // Productモデルをインスタンス化
         $productModel = new Product();
 
         // インスタンスメソッドを呼び出す
-        $products = $productModel->searchProducts($keyword, $selectedCompanyId);
+        $products = $productModel->searchProducts($keyword, $selectedCompanyId, $minPrice, $maxPrice, $minStock, $maxStock);
+        
+        if ($request->ajax()) {
+            return response()->json($products);
+        }
 
         // 会社のデータを取得
         $companyModel = new Company(); 
         $companies = $companyModel->viewTest($request);
 
-        return view('testView', compact('products', 'keyword', 'companies', 'selectedCompanyId'));
+        return view('testView', compact('products', 'keyword',  'selectedCompanyId', 'companies', 'minPrice', 'maxPrice', 'minStock', 'maxStock')); 
     }
 
     public function destroy($id) {
         $productModel = new Product();
         DB::beginTransaction();
-    
+        
         try {
              // 登録処理
             $productModel->deleteProduct($id);
             DB::commit();
+
+            if (request()->ajax()) {
+                return response()->json(['success' => true]);
+            }
+
+            return redirect()->route('show.test');
+
         } catch (\Exception $e) {
             DB::rollback();
-            return back();
+
+            if (request()->ajax()) {
+                return response()->json(['success' => false, 'message' => $e->getMessage()], 500);
+            }
+            return back()->withErrors(['error' => '削除に失敗しました。']);
+            //return back();
         }
         return redirect()->route('show.test');
     }
@@ -68,7 +88,7 @@ class TestController extends Controller
         //         'mimes:jpg,png',
         //     ],
         // ]);
-
+        
         $image = $request->file('image');
 
         $image_path = null;
@@ -77,7 +97,7 @@ class TestController extends Controller
             $image->storeAs('public/images', $file_name);
             $image_path = 'storage/images/' . $file_name;
         }
-
+        
         $model = new Product();
         DB::beginTransaction();
     
@@ -87,6 +107,7 @@ class TestController extends Controller
             DB::commit();
             
         } catch (\Exception $e) {
+            Log::error($e);
             DB::rollback();
             return back();
         }

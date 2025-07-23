@@ -9,7 +9,7 @@ class Product extends Model
 {
     protected $table = 'products'; 
 
-    public function searchProducts($keyword, $selectedCompanyId)
+    public function searchProducts($keyword, $selectedCompanyId, $minPrice, $maxPrice, $minStock, $maxStock)
     {
         $query = DB::table('products')
             ->join('companies', 'products.company_id', '=', 'companies.id')
@@ -21,6 +21,22 @@ class Product extends Model
 
         if (!empty($selectedCompanyId)) {
             $query->where('products.company_id', '=', $selectedCompanyId);
+        }
+
+        if (!empty($minPrice)) {
+            $query->where('products.price', '>=', $minPrice);
+        }
+    
+        if (!empty($maxPrice)) {
+            $query->where('products.price', '<=', $maxPrice);
+        }
+
+        if (!empty($minStock)) {
+            $query->where('products.stock', '>=', $minStock);
+        }
+    
+        if (!empty($maxStock)) {
+            $query->where('products.stock', '<=', $maxStock);
         }
 
         return $query->get();
