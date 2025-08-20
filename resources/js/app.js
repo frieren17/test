@@ -5,7 +5,7 @@ $(document).ready(function() {
     $("#searchForm").on("submit", function(event) {
         event.preventDefault(); // 通常のフォーム送信を防ぐ
 
-        let formData = $(this).serialize(); // フォームデータを取得
+        const formData = $(this).serialize(); // フォームデータを取得
 
         console.log('リクエスト開始');
 
@@ -42,12 +42,9 @@ $(document).ready(function() {
                                 <td>
                                     <button type="button" class="btn btn-primary" onclick="location.href='/product/detail/${product.id}'">詳細</button>
                                 </td>
+                                
                                 <td>
-                                    <form action="/product/delete/${product.id}" method="POST">
-                                        <input type="hidden" name="_token" value="${csrfToken}">
-                                        <input type="hidden" name="_method" value="DELETE">
-                                        <button type="submit" class="btn btn-danger">削除</button>
-                                    </form>
+                                    <button type="button" class="btn btn-danger delete-button" data-id="${product.id}">削除</button>
                                 </td>
                             </tr>
                         `);
@@ -59,6 +56,7 @@ $(document).ready(function() {
                         </tr>
                     `);
                 }
+                $(".tablesorter").trigger("update");
             },
             error: function(error) {
                 console.error("検索に失敗しました:", error);
@@ -66,11 +64,14 @@ $(document).ready(function() {
         });
 
         console.log('リクエスト送信後の処理');
+        // $('.tablesorter').trigger('update');
+        // $('.tablesorter').trigger('sortReset');
 
     });
 
-
+    //function bindDeleteButtons() {
     $(document).on('click', '.delete-button', function () {
+        console.log('削除ボタンがクリックされました');
         const productId = $(this).data('id');
         const csrfToken = $('meta[name="csrf-token"]').attr('content');
         const row = $(this).closest('tr');
@@ -78,8 +79,14 @@ $(document).ready(function() {
         if (!confirm('本当に削除しますか？')) return;
 
         $.ajax({
-            url: `${window.location.origin}/test/public/destroy/${productId}`,
-            method: 'DELETE',
+            //url: `${window.location.origin}/test/public/destroy/${productId}`,
+            //url: `/product/delete/${productId}`,
+            url: `destroy/${productId}`,
+            //method: 'DELETE',
+            method: 'POST',  // ← 本当はPOSTで送る
+            data: {
+                _method: 'DELETE'  // ← Laravelがこれを見てDELETEとして扱う
+            },
             headers: {
                 'X-CSRF-TOKEN': csrfToken,
                 'X-Requested-With': 'XMLHttpRequest'
@@ -94,17 +101,19 @@ $(document).ready(function() {
             }
         });
     });
+    
 
-    $(document).ready(function(){
-        $(".tablesorter").tablesorter({
-            textExtraction: function(node){
-                var attr = $(node).attr('data-value');
-                if(typeof attr !== 'undefined' && attr !== false){
-                    return attr;
-                }
-                return $(node).text();
-            }
-        });
-    }); 
-
+    // $(document).ready(function(){
+    //     bindDeleteButtons();
+    $(".tablesorter").tablesorter({
+        textExtraction: function(node){
+            const attr = $(node).attr('data-value');
+            // if(typeof attr !== 'undefined' && attr !== false){
+            //     return attr;
+            // }
+            // return $(node).text();
+            return (typeof attr !== 'undefined' && attr !== false) ? attr : $(node).text();
+        }
+    });
+//     }); 
 });

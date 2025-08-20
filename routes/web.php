@@ -33,3 +33,4 @@ Route::get('/edit/{id}',[App\Http\Controllers\TestController::class, 'edit'])->n
 Route::get('/productregister', [App\Http\Controllers\TestController::class, 'create'])->name('show.register');
 Route::put('/products/{id}',[App\Http\Controllers\TestController::class, 'update'])->name('show.update');
 Route::post('/productregister',[App\Http\Controllers\TestController::class, 'imageRegist'])->name('regist');
+Route::post('/destroy/{id}', [App\Http\Controllers\TestController::class, 'destroy']);

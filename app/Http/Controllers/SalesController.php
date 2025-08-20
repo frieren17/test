@@ -15,22 +15,28 @@ class SalesController extends Controller
     {
         $request->validate([
             'product_id' => 'required|integer|exists:products,id',
-            'quantity' => 'nullable|integer|min:1',
         ]);
 
         $productId = $request->input('product_id');
-        $quantity = $request->input('quantity', 1);
 
-        // Saleモデルのインスタンスを生成
-        $sale = new Sale();
+        DB::beginTransaction();
+        try{
+            $sale = new Sale();
+            $result = $sale->purchaseProduct($productId);
+            if (isset($result['error'])) {
+                DB::rollBack();
+                return response()->json(['message' => $result['error']], $result['status']);
+            }
+            DB::commit(); 
+            return response()->json(['message' => '購入成功']);
+        } catch (\Exception $e) {
+            DB::rollBack(); 
 
-        // 在庫更新処理（モデル内）
-        $result = $sale->purchaseProduct($productId, $quantity);
-
-        if (isset($result['error'])) {
-            return response()->json(['message' => $result['error']], $result['status']);
+            return response()->json([
+                'message' => '購入処理中にエラーが発生しました。',
+                'error' => $e->getMessage()
+            ], 500);
         }
 
-        return response()->json(['message' => '購入成功']);
     }
 }
